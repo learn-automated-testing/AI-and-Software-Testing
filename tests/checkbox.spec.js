@@ -1,24 +1,22 @@
 const { test, expect } = require('@playwright/test');
 
-test('testing checkboxes', async ({ page }) => {
-  await page.goto('https://practiceautomatedtesting.com/webelements/Checkboxes');
+test('Checkbox Test', async ({ page }) => {
+    await page.goto('https://practiceautomatedtesting.com/webelements/Checkboxes');
 
-  const checkboxIDs = ['checkbox1', 'checkbox2'];
-  
-  for (let id of checkboxIDs) {
-    const checkbox = await page.waitForSelector(`#${id}`);
-    await checkbox.click();
+    const checkbox1 = await page.$('#checkbox1');
+    const checkbox2 = await page.$('#checkbox2');
 
-    let smiley = await page.$('.smiley');
-    let badSmiley = await page.$('.bad-smiley');
-    
-    expect(smiley || badSmiley).toBeTruthy();
+    await checkbox1.click();
+    let checkbox1State = await page.evaluate(el => el.checked, checkbox1);
+    expect(checkbox1State).toBe(true);
 
-    if(smiley) {
-        console.log("Checkbox displayed a smiley");
-    }
-    if(badSmiley) {
-        console.log("Checkbox displayed a bad smiley");
-    }
-  }
+    await checkbox2.click();
+    let checkbox2State = await page.evaluate(el => el.checked, checkbox2);
+    expect(checkbox2State).toBe(true);
+
+    let feedback1 = await page.$('.smiley');
+    expect(feedback1).toBeTruthy();
+
+    let feedback2 = await page.$('.badsmiley');
+    expect(feedback2).toBeTruthy();
 });
