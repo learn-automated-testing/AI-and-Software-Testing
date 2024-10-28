@@ -1,29 +1,16 @@
 const { test, expect } = require('@playwright/test');
 
-test('Test Checkbox Functionality', async ({ page }) => {
-    // Navigate to the webpage
-    await page.goto('https://practiceautomatedtesting.com/webelements/Checkboxes');
-    
-    // Select and verify each checkbox
-    for (let i = 1; i <= 2; i++) {
-        const checkbox = await page.waitForSelector(`#checkbox${i}`);
-        const result = await page.waitForSelector('#result');
+test('Checkboxes', async ({ page }) => {
+  await page.goto('https://practiceautomatedtesting.com/webelements/Checkboxes');
 
-        // Click on the checkbox and wait for the result to load
-        await checkbox.check();
-        await page.waitForTimeout(1000);
+  const checkbox1 = await page.$('#checkbox1');
+  await checkbox1.check();
+  let smiley1 = await page.$('#smiley1');
+  expect(await smiley1.isVisible()).toBe(true);
 
-        // Get the attribute of the result
-        const resultSmiley = await result.getAttribute('class');
-        
-        // Validate the result
-        if (resultSmiley === 'smiley') {
-            expect(await checkbox.isChecked()).toBe(true);
-        } else if (resultSmiley === 'bad-smiley') {
-            expect(await checkbox.isChecked()).toBe(false);
-        }
-        
-        // Uncheck the checkbox before the next iteration
-        await checkbox.uncheck();
-    }
+  
+  const checkbox2 = await page.$('#checkbox2');
+  await checkbox2.check();
+  let smiley2 = await page.$('#smiley2');
+  expect(await smiley2.isVisible()).toBe(true);
 });
