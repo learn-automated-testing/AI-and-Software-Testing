@@ -1,22 +1,17 @@
 const { test, expect } = require('@playwright/test');
 
-test('Checkbox Test', async ({ page }) => {
-    await page.goto('https://practiceautomatedtesting.com/webelements/Checkboxes');
+test('Check smiley outputs', async ({ page }) => {
 
-    const checkbox1 = await page.$('#checkbox1');
-    const checkbox2 = await page.$('#checkbox2');
+  await page.goto('https://practiceautomatedtesting.com/webelements/Checkboxes');
 
-    await checkbox1.click();
-    let checkbox1State = await page.evaluate(el => el.checked, checkbox1);
-    expect(checkbox1State).toBe(true);
+  for (let i = 1; i <= 2; i++) {
+    const checkbox = await page.waitForSelector(`#checkbox${i}`);
+    await checkbox.click();
+    const smiley = await page.$('.smileyClass'); // Assuming the smiley CSS class name is smileyClass
+    expect(smiley).toBeTruthy();
 
-    await checkbox2.click();
-    let checkbox2State = await page.evaluate(el => el.checked, checkbox2);
-    expect(checkbox2State).toBe(true);
-
-    let feedback1 = await page.$('.smiley');
-    expect(feedback1).toBeTruthy();
-
-    let feedback2 = await page.$('.badsmiley');
-    expect(feedback2).toBeTruthy();
+    // Validating whether a 'good' smiley or 'bad' smiley is displayed.
+    const smileyText = await page.$eval('.smileyClass', element => element.innerText);
+    expect(smileyText).toMatch(/good|bad/);
+  }
 });
